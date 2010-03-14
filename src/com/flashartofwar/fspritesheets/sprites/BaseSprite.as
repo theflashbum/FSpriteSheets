@@ -1,5 +1,5 @@
 
-package com.flashartofwar.decalsheets.decals 
+package com.flashartofwar.fspritesheets.sprites
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -8,10 +8,10 @@ package com.flashartofwar.decalsheets.decals
 	/**
 	 * @author jessefreeman
 	 */
-	public class BaseDecal extends Bitmap implements IBaseDecal 
+	public class BaseSprite extends Bitmap implements IBaseSprite
 	{
 
-		public function BaseDecal(bitmapData : BitmapData = null, pixelSnapping : String = "auto", smoothing : Boolean = false)
+		public function BaseSprite(bitmapData : BitmapData = null, pixelSnapping : String = "auto", smoothing : Boolean = false)
 		{
 			super( bitmapData, pixelSnapping, smoothing );
 		}

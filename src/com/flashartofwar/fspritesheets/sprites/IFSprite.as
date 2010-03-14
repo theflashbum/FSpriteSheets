@@ -1,5 +1,5 @@
 
-package com.flashartofwar.decalsheets.decals 
+package com.flashartofwar.fspritesheets.sprites
 {
 	import flash.display.BitmapData;
 	import flash.events.IEventDispatcher;
@@ -7,7 +7,7 @@ package com.flashartofwar.decalsheets.decals
 	/**
 	 * @author jessefreeman
 	 */
-	public interface IDecal extends IEventDispatcher, IBaseDecal
+	public interface IFSprite extends IEventDispatcher, IBaseSprite
 	{
 
 		function refresh() : void;

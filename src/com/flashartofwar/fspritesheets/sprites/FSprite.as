@@ -1,11 +1,13 @@
-package com.flashartofwar.decalsheets.decals
+package com.flashartofwar.fspritesheets.sprites
 {
-	import com.flashartofwar.decalsheets.sheets.IDecalSheet;
+	import com.flashartofwar.fspritesheets.sheets.ISpriteSheet;
 	import flash.display.BitmapData;
-	import flash.display.Bitmap;	import flash.events.Event;	
-	/** 
+	import flash.display.Bitmap;
+	import flash.events.Event;	
+
+	/** 
 	 * <p>Original Author:  Jesse Freeman of FlashArtOfWar.com</p>
-	 * <p>Class File: Decal.as</p>
+	 * <p>Class File: FSprite.as</p>
 	 * 
 	 * <p>Permission is hereby granted, free of charge, to any person obtaining a copy
 	 * of this software and associated documentation files (the "Software"), to deal
@@ -42,10 +44,10 @@ package com.flashartofwar.decalsheets.decals
 	 * @author Jesse Freeman http://www.jessefreeman.com
 	 * 
 	 */	
-	public class Decal extends BaseDecal implements IDecal
+	public class FSprite extends BaseSprite implements IFSprite
 	{
 
-		protected var sheetSrc : IDecalSheet;
+		protected var sheetSrc : ISpriteSheet;
 		
 		override public function get loaded():Boolean
 		{
@@ -66,7 +68,7 @@ package com.flashartofwar.decalsheets.decals
 		 * @param smoothing
 		 * 
 		 */
-		public function Decal(name : String, src : IDecalSheet, pixelSnapping : String = "auto", smoothing : Boolean = false)
+		public function FSprite(name : String, src : ISpriteSheet, pixelSnapping : String = "auto", smoothing : Boolean = false)
 		{
 
 			super( null, pixelSnapping, smoothing );
@@ -82,7 +84,8 @@ package com.flashartofwar.decalsheets.decals
 			
 			addListeners( sheetSrc );
 		}
-		/**
+
+		/**
 		 * <p>Gets new bitmap data from the DecalSheet src based on its name.</p>
 		 * 
 		 */
@@ -107,27 +110,30 @@ package com.flashartofwar.decalsheets.decals
 			removeListeners( sheetSrc );
 			sheetSrc = null;
 		}
-		/**
+
+		/**
 		 * @private
 		 * @param target
 		 * 
 		 */		
-		protected function addListeners(target : IDecalSheet) : void
+		protected function addListeners(target : ISpriteSheet) : void
 		{
 			target.addEventListener( Event.CHANGE, onChange, false, 0, true );
 			target.addEventListener( Event.DEACTIVATE, onDeactivate );
 		}
-		/**
+
+		/**
 		 * @private
 		 * @param target
 		 * 
 		 */			
-		protected function removeListeners(target : IDecalSheet) : void
+		protected function removeListeners(target : ISpriteSheet) : void
 		{
 			target.removeEventListener( Event.CHANGE, onChange );
 			target.removeEventListener( Event.DEACTIVATE, onDeactivate );
 		}
-		/**
+
+		/**
 		 * @private
 		 * @param event
 		 * 
@@ -137,7 +143,8 @@ package com.flashartofwar.decalsheets.decals
 			event.stopPropagation( );
 			refresh( );
 		}
-		/**
+
+		/**
 		 * 
 		 * @param event
 		 * 

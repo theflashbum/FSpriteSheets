@@ -1,7 +1,7 @@
 
-package com.flashartofwar.decalsheets.sheets
+package com.flashartofwar.fspritesheets.sheets
 {
-	import com.flashartofwar.decalsheets.decals.Decal;
+	import com.flashartofwar.fspritesheets.sprites.FSprite;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.events.Event;
@@ -11,7 +11,7 @@ package com.flashartofwar.decalsheets.sheets
 
 	/** 
 	 * <p>Original Author:  Jesse Freeman of FlashArtOfWar.com</p>
-	 * <p>Class File: Decal.as</p>
+	 * <p>Class File: FSprite.as</p>
 	 * 
 	 * <p>Permission is hereby granted, free of charge, to any person obtaining a copy
 	 * of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,7 @@ package com.flashartofwar.decalsheets.sheets
 	 * @author Jesse Freeman http://www.jessefreeman.com
 	 * 
 	 */	
-	public class DecalSheet extends Bitmap implements IDecalSheet
+	public class SpriteSheet extends Bitmap implements ISpriteSheet
 	{
 
 		protected var decalRectangles : Dictionary = new Dictionary( true );
@@ -58,7 +58,7 @@ package com.flashartofwar.decalsheets.sheets
 		 * @param smoothing
 		 * 
 		 */	
-		public function DecalSheet(bitmapData : BitmapData = null, pixelSnapping : String = "auto", smoothing : Boolean = false)
+		public function SpriteSheet(bitmapData : BitmapData = null, pixelSnapping : String = "auto", smoothing : Boolean = false)
 		{
 			super( bitmapData, pixelSnapping, smoothing );
 		}
@@ -80,7 +80,7 @@ package com.flashartofwar.decalsheets.sheets
 		 * 
 		 * <p>You define a Decal's coordinates by supplying a name and rectangle.</p>
 		 * 
-		 * @param name The id used to look decals up.
+		 * @param name The id used to look sprites up.
 		 * @param rectangle The x, y, width, and height of representing the Decal
 		 * on the Sheet's BitmapData.
 		 * 
@@ -119,9 +119,9 @@ package com.flashartofwar.decalsheets.sheets
 		 * @return 
 		 * 
 		 */	
-		public function getDecal(name : String, pixelSnapping : String = "auto", smoothing : Boolean = false) : Decal
+		public function getDecal(name : String, pixelSnapping : String = "auto", smoothing : Boolean = false) : FSprite
 		{
-			return decalRectangles[name] ? new Decal( name, this, pixelSnapping, smoothing ) : null;
+			return decalRectangles[name] ? new FSprite( name, this, pixelSnapping, smoothing ) : null;
 		}
 
 		/**

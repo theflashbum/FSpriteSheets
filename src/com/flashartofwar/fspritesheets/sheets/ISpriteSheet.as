@@ -1,13 +1,13 @@
 
-package com.flashartofwar.decalsheets.sheets
+package com.flashartofwar.fspritesheets.sheets
 {
-	import com.flashartofwar.decalsheets.decals.Decal;
+	import com.flashartofwar.fspritesheets.sprites.FSprite;
 	import flash.display.BitmapData;
 	import flash.display.IBitmapDrawable;
 	import flash.events.IEventDispatcher;
 	import flash.geom.Rectangle;	
 
-	public interface IDecalSheet extends IBitmapDrawable, IEventDispatcher
+	public interface ISpriteSheet extends IBitmapDrawable, IEventDispatcher
 	{
 
 		function get loaded() : Boolean;
@@ -16,7 +16,7 @@ package com.flashartofwar.decalsheets.sheets
 
 		function deleteDecal(name : String) : Boolean;
 
-		function getDecal(name : String, pixelSnapping : String = "auto", smoothing : Boolean = false) : Decal;
+		function getDecal(name : String, pixelSnapping : String = "auto", smoothing : Boolean = false) : FSprite;
 
 		function sample(name : String, smoothing : Boolean = false) : BitmapData;
 

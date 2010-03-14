@@ -131,11 +131,11 @@
 			<arg line="-window-title 'FlashDecalSheets'" />
 			<arg line="-main-title 'FlashDecalSheets'" />
 			<arg line="-footer 'FlashDecalSheets - http://flashdecalsheets.flashartofwar.com/ - Documentation generated at: ${docgen.time}'" />
-			<arg line="-package com.flashartofwar.decalsheets.decals 'Decals are the core Bitmap Class of the library.'" />
-			<arg line="-package com.flashartofwar.decalsheets.events 'DecalSheets Events.'" />
-			<arg line="-package com.flashartofwar.decalsheets.loader 'Multi-loader for DecalSheets.'" />
-			<arg line="-package com.flashartofwar.decalsheets.managers 'Singletons for DecalSheets manager.'" />
-			<arg line="-package com.flashartofwar.decalsheets.sheets 'Way to organize multiple decals on a single image.'" />
+			<arg line="-package com.flashartofwar.fspritesheetsts.decals 'Decals are the core Bitmap Class of the library.'" />
+			<arg line="-package com.flashartofwar.fspritesheetsts.events 'DecalSheets Events.'" />
+			<arg line="-package com.flashartofwar.fspritesheetsts.loader 'Multi-loader for DecalSheets.'" />
+			<arg line="-package com.flashartofwar.fspritesheetsts.managers 'Singletons for DecalSheets manager.'" />
+			<arg line="-package com.flashartofwar.fspritesheetsts.sheets 'Way to organize multiple decals on a single image.'" />
 		</java>
 
 		<echo>[create-docs] ASDOC documentation generated successfully</echo>

@@ -1,6 +1,6 @@
-package com.flashartofwar.decalsheets
+package com.flashartofwar.fspritesheets
 {
-	import com.flashartofwar.decalsheets.decals.BaseDecalTest;
+	import com.flashartofwar.fspritesheets.sprites.BaseDecalTest;
 
 	[Suite]
 	[RunWith("org.flexunit.runners.Suite")]

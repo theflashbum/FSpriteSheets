@@ -1,11 +1,11 @@
-package com.flashartofwar.decalsheets.decals {
+package com.flashartofwar.fspritesheets.sprites {
 	import flexunit.framework.Assert;
 
 	public class BaseDecalTest
 	{
 
 		
-		private var decal : BaseDecal;
+		private var decal : BaseSprite;
 		
 		public function BaseDecalTest()
 		{
@@ -15,7 +15,7 @@ package com.flashartofwar.decalsheets.decals {
 		[Test]
 		public function testTidy():void
 		{
-			decal = new BaseDecal();
+			decal = new BaseSprite();
 			Assert.assertNotNull(decal);
 		}
 	}
