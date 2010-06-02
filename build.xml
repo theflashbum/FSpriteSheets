@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<project name="robotlegs-framework" basedir="." default="test">
-	<!-- This is 100% ripped off from RobotLegs - http://github.com/darscan/robotlegs-framework.
+<project name="robotlegs-bluelego" basedir="." default="test">
+	<!-- This is 100% ripped off from RobotLegs - http://github.com/darscan/robotlegs-bluelego.
    I am working on making my own but this one is so damn good I couldn't help myself. -->
 
 	<!-- set up a prefix for all environment variables -->

@@ -1,12 +1,12 @@
 package com.flashartofwar.fspritesheets
 {
-	import com.flashartofwar.fspritesheets.sprites.BaseDecalTest;
+    import com.flashartofwar.fspritesheets.sprites.BaseSpriteTest;
 
-	[Suite]
+    [Suite]
 	[RunWith("org.flexunit.runners.Suite")]
 	public class DecalSheetsTestSuite
 	{
-		public var test1:BaseDecalTest;
+		public var test1:BaseSpriteTest;
 		
 	}
 }

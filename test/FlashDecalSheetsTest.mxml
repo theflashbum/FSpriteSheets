@@ -6,8 +6,7 @@
 				 backgroundColor="#ffffff" horizontalScrollPolicy="off" verticalScrollPolicy="off">
 	<mx:Script>
 		<![CDATA[
-
-        import com.flashartofwar.fspritesheets.sprites.BaseDecalTest;
+        import com.flashartofwar.fspritesheets.sprites.BaseSpriteTest;
 
         import org.flexunit.internals.TraceListener;
         import org.flexunit.listeners.CIListener;
@@ -25,7 +24,7 @@
             core = new FlexUnitCore();
             core.addListener(new CIListener());
             core.addListener(new TraceListener());
-            core.run(BaseDecalTest);
+            core.run(BaseSpriteTest);
         }
 		]]>
 	</mx:Script>
