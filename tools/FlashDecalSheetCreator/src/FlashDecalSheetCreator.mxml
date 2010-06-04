@@ -1,415 +1,418 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/halo" xmlns:local="*"
-						layout="absolute" showFlexChrome="false" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="501" height="446"
-						applicationComplete="init()" backgroundColor="0xEFEFEF" focusRect="false">
+<mx:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+                        xmlns:mx="library://ns.adobe.com/flex/halo" xmlns:local="*"
+                        layout="absolute" showFlexChrome="false" paddingBottom="0" paddingLeft="0" paddingRight="0"
+                        paddingTop="0" width="501" height="446"
+                        applicationComplete="init()" backgroundColor="0xEFEFEF" focusRect="false">
 
-	<fx:Script>
+    <fx:Script>
 		<![CDATA[
-			import com.adobe.images.JPGEncoder;
-			import mx.collections.ArrayList;
+        import com.adobe.images.JPGEncoder;
 
-			private var file:File;
-			private var files:Vector.<File>;
-			private var xmlString:String;
-			private var isLoading:Boolean;
-			private var sheets:Object;
-			private var stitchedImages:Vector.<Sprite>;
-			private var completedBitmaps:Vector.<BitmapData>;
-			private var srcLookup:Array;
+        import mx.collections.ArrayList;
 
-			[Bindable]
-			private var loadedNamesList:ArrayList;
-			[Bindable]
-			private var previewImage:String;
+        private var file:File;
+        private var files:Vector.<File>;
+        private var xmlString:String;
+        private var isLoading:Boolean;
+        private var sheets:Object;
+        private var stitchedImages:Vector.<Sprite>;
+        private var completedBitmaps:Vector.<BitmapData>;
+        private var srcLookup:Array;
 
-			/**
-			 * @author - Clemente Gomez - http://www.kreativeking.com
-			 **/
+        [Bindable]
+        private var loadedNamesList:ArrayList;
+        [Bindable]
+        private var previewImage:String;
 
-			private function init():void
-			{
-				file = new File();
-				file.addEventListener(Event.SELECT, multipleItemsSelected);
+        /**
+         * @author - Clemente Gomez - http://www.kreativeking.com
+         **/
 
-				loadedNamesList = new ArrayList();
-				files = new Vector.<File>();
-				sheets = {};
-				stitchedImages = new Vector.<Sprite>();
-				completedBitmaps = new Vector.<BitmapData>();
+        private function init():void
+        {
+            file = new File();
+            file.addEventListener(Event.SELECT, multipleItemsSelected);
 
-				srcLookup = new Array();
+            loadedNamesList = new ArrayList();
+            files = new Vector.<File>();
+            sheets = {};
+            stitchedImages = new Vector.<Sprite>();
+            completedBitmaps = new Vector.<BitmapData>();
 
-				isLoading = false;
+            srcLookup = new Array();
 
-				// Set the XML Properties for the output XML file.
-				XML.prettyIndent = 4;
-				XML.prettyPrinting = true;
-				XML.ignoreProcessingInstructions= false;
-				XML.ignoreWhitespace = true;
-				XML.ignoreComments = false;
-			}
+            isLoading = false;
 
-			/**
-			 * Direcetory Selection Event Handler
-			 *
-			 * @param e Event
-			 **/
-			private function multipleItemsSelected(e:Event) : void
-			{
-				trace("Selected Multiple");
-				sheets[(e.target as File).name] = []; //-----------------------------------------------------Create a property on the Sheet object that holds an Array.
-				var list:Array = ((e.target as File).getDirectoryListing() as Array).filter(isImage); //-----Stores all the files in the slected directory that are a JPEG, GIF or PNG.
-				var i:int = 0;
-				var len:Number = list.length;
+            // Set the XML Properties for the output XML file.
+            XML.prettyIndent = 4;
+            XML.prettyPrinting = true;
+            XML.ignoreProcessingInstructions = false;
+            XML.ignoreWhitespace = true;
+            XML.ignoreComments = false;
+        }
 
-				for(i ; i < len; i++)
-				{
-					list[i].addEventListener(Event.COMPLETE, fileLoaded);
-					list[i].addEventListener(Event.OPEN, fileStarted);
-					list[i].addEventListener(ProgressEvent.PROGRESS, fileLoading);
-					sheets[(e.target as File).name].push((list[i] as File)); //------------------------------Push the file into the Array for further reference.
-					(list[i] as File).load(); //-------------------------------------------------------------Begin loading the file contents.
-				}
-			}
+        /**
+         * Direcetory Selection Event Handler
+         *
+         * @param e Event
+         **/
+        private function multipleItemsSelected(e:Event):void
+        {
+            trace("Selected Multiple");
+            sheets[(e.target as File).name] = []; //-----------------------------------------------------Create a property on the Sheet object that holds an Array.
+            var list:Array = ((e.target as File).getDirectoryListing() as Array).filter(isImage); //-----Stores all the files in the slected directory that are a JPEG, GIF or PNG.
+            var i:int = 0;
+            var len:Number = list.length;
 
-			/**
-			 * Checks if a File JPEG, PNG or GIF.
-			 *
-			 * @param element Item in Array.
-			 * @param i Array index.
-			 * @param arr The array.
-			 *
-			 * @return Boolean
-			 **/
-			private function isImage(element:*, i:int, arr:Array):Boolean
-			{
-				var ext:String = (element as File).extension;
-				return ( ext == "jpg" || ext == "jpeg" || ext == "png" || ext == "gif");
-			}
+            for (i; i < len; i++)
+            {
+                list[i].addEventListener(Event.COMPLETE, fileLoaded);
+                list[i].addEventListener(Event.OPEN, fileStarted);
+                list[i].addEventListener(ProgressEvent.PROGRESS, fileLoading);
+                sheets[(e.target as File).name].push((list[i] as File)); //------------------------------Push the file into the Array for further reference.
+                (list[i] as File).load(); //-------------------------------------------------------------Begin loading the file contents.
+            }
+        }
 
-			/**
-			 * File Connection Open
-			 *
-			 * @param e Event
-			 **/
-			private function fileStarted(e:Event):void
-			{
-				trace((e.target as File).name + " started loaded");
-			}
+        /**
+         * Checks if a File JPEG, PNG or GIF.
+         *
+         * @param element Item in Array.
+         * @param i Array index.
+         * @param arr The array.
+         *
+         * @return Boolean
+         **/
+        private function isImage(element:*, i:int, arr:Array):Boolean
+        {
+            var ext:String = (element as File).extension;
+            return ( ext == "jpg" || ext == "jpeg" || ext == "png" || ext == "gif");
+        }
 
-			/**
-			 * Adds the loaded File name to the list of loaded items.
-			 *
-			 * @param e Event
-			 **/
-			private function fileLoaded(e:Event):void
-			{
-				trace((e.target as File).name + " loaded" + (e.target as File).extension);
-				loadedNamesList.addItem((e.target as File).name);
-			}
+        /**
+         * File Connection Open
+         *
+         * @param e Event
+         **/
+        private function fileStarted(e:Event):void
+        {
+            trace((e.target as File).name + " started loaded");
+        }
 
-			/**
-			 * ProgressEvent
-			 *
-			 * @param e ProgressEvent
-			 **/
-			private function fileLoading(e:ProgressEvent):void
-			{
-				//trace((e.target as File).name + " " + e.bytesLoaded / e.bytesTotal + " Loaded");
-			}
+        /**
+         * Adds the loaded File name to the list of loaded items.
+         *
+         * @param e Event
+         **/
+        private function fileLoaded(e:Event):void
+        {
+            trace((e.target as File).name + " loaded" + (e.target as File).extension);
+            loadedNamesList.addItem((e.target as File).name);
+        }
 
-			/**
-			 * Start Browsing to upload files.
-			 **/
-			private function beginBrowse():void
-			{
-				file.browseForDirectory("Select Folder");
-			}
+        /**
+         * ProgressEvent
+         *
+         * @param e ProgressEvent
+         **/
+        private function fileLoading(e:ProgressEvent):void
+        {
+            //trace((e.target as File).name + " " + e.bytesLoaded / e.bytesTotal + " Loaded");
+        }
 
-			/**
-			 * Begins the process of creates the XML output and laying out the images.
-			 **/
-			private function createSheets():void
-			{
-				var sheetName:String;
+        /**
+         * Start Browsing to upload files.
+         **/
+        private function beginBrowse():void
+        {
+            file.browseForDirectory("Select Folder");
+        }
 
-				if(!isLoading) //------------------------If application isnt currently processing images, start processing.
-				{
-					isLoading = true;
-					makeSheets();
-				}
+        /**
+         * Begins the process of creates the XML output and laying out the images.
+         **/
+        private function createSheets():void
+        {
+            var sheetName:String;
 
-				/**
-				 * Creates the Sheet section of the decalsheet.
-				 **/
-				function makeSheets() :void
-				{
-					var name:String;
-					xmlString = '<?xml version="1.0" encoding="utf-8"?><decalSheet><sheets baseURL="" >'
+            if (!isLoading) //------------------------If application isnt currently processing images, start processing.
+            {
+                isLoading = true;
+                makeSheets();
+            }
 
-					//Iterate through the sheets and creates the XML output as a String. The string is concatenated into a long string which we will turn into XML later.
-					for(name in sheets)
-					{
-						sheetName = name;
+            /**
+             * Creates the Sheet section of the decalsheet.
+             **/
+            function makeSheets():void
+            {
+                var name:String;
+                xmlString = '<?xml version="1.0" encoding="utf-8"?><decalSheet><sheets baseURL="" >'
 
-						xmlString = xmlString.concat('<sheet name="' + sheetName + '" src="" preload="true" w="" h="" />');
-					}
+                //Iterate through the sheets and creates the XML output as a String. The string is concatenated into a long string which we will turn into XML later.
+                for (name in sheets)
+                {
+                    sheetName = name;
 
-					xmlString = xmlString.concat('</sheets><decals>');
+                    xmlString = xmlString.concat('<sheet name="' + sheetName + '" src="" preload="true" w="" h="" />');
+                }
 
-					//Begin laying out the images.
-					layoutImages();
-				}
-			}
+                xmlString = xmlString.concat('</sheets><decals>');
 
-			/**
-			 * Returns the amount of sheets.
-			 *
-			 * @return Number
-			 **/	
-			private function getSheetLength():Number
-			{
-				var name:String;
-				var len:Number = 0;
-				for(name in sheets)
-				{
-					len++;
-				}
-				return len;
-			}
+                //Begin laying out the images.
+                layoutImages();
+            }
+        }
 
-			/**
-			 * Lays out each of the images into a single image horizontally per sheet.
-			 **/
-			private function layoutImages():void
-			{
-				var i:int = 0; // --------------------------------------------------------Number to iterate between images.
-				var j:int = 0; // --------------------------------------------------------Number to iteratre between sheets.
-				var len:Number = getSheetArrayLength(j); //-------------------------------Number of images in a Sheet.
-				var sheetsLen:Number = getSheetLength(); //-------------------------------Number of Sheets.
-				var loader:Loader;
-				var bitmapData:BitmapData;
-				var sheet:Sprite = new Sprite();
-				var bitmap:Bitmap;
-				var bitmaps:Array = [];
-				var timer:Timer = new Timer(55, 1); //------------------------------------Delay timer for grabbing byte data from the loader.
-				var sheetName:String = getSheetName(j); //--------------------------------Name of the current sheet.
+        /**
+         * Returns the amount of sheets.
+         *
+         * @return Number
+         **/
+        private function getSheetLength():Number
+        {
+            var name:String;
+            var len:Number = 0;
+            for (name in sheets)
+            {
+                len++;
+            }
+            return len;
+        }
 
-				timer.addEventListener(TimerEvent.TIMER_COMPLETE, createData);
+        /**
+         * Lays out each of the images into a single image horizontally per sheet.
+         **/
+        private function layoutImages():void
+        {
+            var i:int = 0; // --------------------------------------------------------Number to iterate between images.
+            var j:int = 0; // --------------------------------------------------------Number to iteratre between sheets.
+            var len:Number = getSheetArrayLength(j); //-------------------------------Number of images in a Sheet.
+            var sheetsLen:Number = getSheetLength(); //-------------------------------Number of Sheets.
+            var loader:Loader;
+            var bitmapData:BitmapData;
+            var sheet:Sprite = new Sprite();
+            var bitmap:Bitmap;
+            var bitmaps:Array = [];
+            var timer:Timer = new Timer(55, 1); //------------------------------------Delay timer for grabbing byte data from the loader.
+            var sheetName:String = getSheetName(j); //--------------------------------Name of the current sheet.
 
-				loadBytes(i); //----------------------------------------------------------Begin Process.
+            timer.addEventListener(TimerEvent.TIMER_COMPLETE, createData);
+
+            loadBytes(i); //----------------------------------------------------------Begin Process.
 
 
-				/**
-				 * Returns the name of a sheet.
-				 *
-				 * @param i Sheet index.
-				 * @return String
-				 **/
-				function getSheetName(i:int):String
-				{
-					var name:String;
-					var len:Number = 0;
-					for(name in sheets)
-					{
-						if(len == i)
-						{
-							return name;
-						}
-						len++;
-					}
-					return undefined;
-				}
+            /**
+             * Returns the name of a sheet.
+             *
+             * @param i Sheet index.
+             * @return String
+             **/
+            function getSheetName(i:int):String
+            {
+                var name:String;
+                var len:Number = 0;
+                for (name in sheets)
+                {
+                    if (len == i)
+                    {
+                        return name;
+                    }
+                    len++;
+                }
+                return undefined;
+            }
 
-				/**
-				 * Returns the amount of images in a sheet.
-				 *
-				 * @param i Sheet index.
-				 * @return Number
-				 **/
-				function getSheetArrayLength(i:int):Number
-				{
-					var name:String;
-					var len:Number = 0;
+            /**
+             * Returns the amount of images in a sheet.
+             *
+             * @param i Sheet index.
+             * @return Number
+             **/
+            function getSheetArrayLength(i:int):Number
+            {
+                var name:String;
+                var len:Number = 0;
 
-					for(name in sheets)
-					{
-						if(len == i)
-						{
-							return (sheets[name] as Array).length;
-						}
-						len++
-					}
-					return null;
-				}
+                for (name in sheets)
+                {
+                    if (len == i)
+                    {
+                        return (sheets[name] as Array).length;
+                    }
+                    len++
+                }
+                return null;
+            }
 
-				/**
-				 * Stitches the bitmaps toghether to make one image.
-				 *
-				 * @param e TimerEvent
-				 **/
-				function createData(e:TimerEvent):void
-				{
-					trace("Creating Image " + (i + 1));
-					bitmapData = new BitmapData(loader.width, loader.height, true);
-					bitmapData.draw(loader); 
-					bitmap = new Bitmap(bitmapData.clone());
+            /**
+             * Stitches the bitmaps toghether to make one image.
+             *
+             * @param e TimerEvent
+             **/
+            function createData(e:TimerEvent):void
+            {
+                trace("Creating Image " + (i + 1));
+                bitmapData = new BitmapData(loader.width, loader.height, true);
+                bitmapData.draw(loader);
+                bitmap = new Bitmap(bitmapData.clone());
 
-					// Sets the bitmap x property to 0 if it is the first image
-					// and sets it to the previous image x property plus the width
-					// if it is not the first
-					bitmap.x = (i > 0) ? (bitmaps[i - 1] as Bitmap).x + (bitmaps[i - 1] as Bitmap).width : 0;
+                // Sets the bitmap x property to 0 if it is the first image
+                // and sets it to the previous image x property plus the width
+                // if it is not the first
+                bitmap.x = (i > 0) ? (bitmaps[i - 1] as Bitmap).x + (bitmaps[i - 1] as Bitmap).width : 0;
 
-					// XML output as a String for the current image beinging processed.
-					xmlString = xmlString.concat('<decal name="' + sheets[sheetName][i].name + '" sheet="' + sheetName + '" x="' +  bitmap.x + '" y="' + bitmap.y + '" width="' + bitmap.width + '" height="' + bitmap.height + '" />');
+                // XML output as a String for the current image beinging processed.
+                xmlString = xmlString.concat('<decal name="' + sheets[sheetName][i].name + '" sheet="' + sheetName + '" x="' + bitmap.x + '" y="' + bitmap.y + '" width="' + bitmap.width + '" height="' + bitmap.height + '" />');
 
-					// Adds the bitmap to a sprite which will be used to create the final image.
-					sheet.addChild(bitmap);
+                // Adds the bitmap to a sprite which will be used to create the final image.
+                sheet.addChild(bitmap);
 
-					bitmaps.push(bitmap);
-					i++; // ---------------------------------------------------------Increment i ( image ).
-					if(i < len) //---------------------------------------------------If the current image is not the last image in the sheet, redo the process.
-					{
-						loadBytes(i);
-					}
-					else if(j < sheetsLen - 1) //------------------------------------If the current sheet is not the final sheet, change the sheet and redo the process.
-					{
-						j++; //------------------------------------------------------Increment j ( sheet ).
-						i = 0; //----------------------------------------------------Reset i ( image ).
-						len = getSheetArrayLength(j); //-----------------------------Get the amount of images in the new sheet. 
-						stitchedImages.push(sheet); //-------------------------------Add the completed sheet ( Sheet with all the images laid out ) to an array.
-						bitmaps = []; //---------------------------------------------Reset the array of processed bitmaps.
-						sheetName = getSheetName(j); //------------------------------Get name of the new sheet.
-						sheet = new Sprite(); //-------------------------------------Reset the final image sprite.
-						loadBytes(i); //---------------------------------------------Begin Process.
-					}
-					else //----------------------------------------------------------If the current sheet is the last sheet.
-					{
-						stitchedImages.push(sheet); //-------------------------------Add the completed sheet ( Sheet with all the images laid out ) to an array.
-						xmlString = xmlString.concat('</decals></decalSheet>'); //---Close off the XML output.
-						i = 0; //----------------------------------------------------Reset i to be used in a new loop.
-						len = stitchedImages.length;
-						for(i ; i < len ; i++)
-						{
-							// Create bitmapData for each of the completed sheets.
-							var completeBitmapData:BitmapData = new BitmapData(stitchedImages[i].width, stitchedImages[i].height, true);
-							completeBitmapData.draw(stitchedImages[i]);
-							completedBitmaps.push(completeBitmapData);
-						}
-						encodeJPEG(completedBitmaps); //-----------------------------Begin Encoding.
-					}
-				}
+                bitmaps.push(bitmap);
+                i++; // ---------------------------------------------------------Increment i ( image ).
+                if (i < len) //---------------------------------------------------If the current image is not the last image in the sheet, redo the process.
+                {
+                    loadBytes(i);
+                }
+                else if (j < sheetsLen - 1) //------------------------------------If the current sheet is not the final sheet, change the sheet and redo the process.
+                {
+                    j++; //------------------------------------------------------Increment j ( sheet ).
+                    i = 0; //----------------------------------------------------Reset i ( image ).
+                    len = getSheetArrayLength(j); //-----------------------------Get the amount of images in the new sheet.
+                    stitchedImages.push(sheet); //-------------------------------Add the completed sheet ( Sheet with all the images laid out ) to an array.
+                    bitmaps = []; //---------------------------------------------Reset the array of processed bitmaps.
+                    sheetName = getSheetName(j); //------------------------------Get name of the new sheet.
+                    sheet = new Sprite(); //-------------------------------------Reset the final image sprite.
+                    loadBytes(i); //---------------------------------------------Begin Process.
+                }
+                else //----------------------------------------------------------If the current sheet is the last sheet.
+                {
+                    stitchedImages.push(sheet); //-------------------------------Add the completed sheet ( Sheet with all the images laid out ) to an array.
+                    xmlString = xmlString.concat('</decals></decalSheet>'); //---Close off the XML output.
+                    i = 0; //----------------------------------------------------Reset i to be used in a new loop.
+                    len = stitchedImages.length;
+                    for (i; i < len; i++)
+                    {
+                        // Create bitmapData for each of the completed sheets.
+                        var completeBitmapData:BitmapData = new BitmapData(stitchedImages[i].width, stitchedImages[i].height, true);
+                        completeBitmapData.draw(stitchedImages[i]);
+                        completedBitmaps.push(completeBitmapData);
+                    }
+                    encodeJPEG(completedBitmaps); //-----------------------------Begin Encoding.
+                }
+            }
 
-				/**
-				 * Load the byte data from the loaded files.
-				 *
-				 * @param i Current image index.
-				 **/
-				function loadBytes(i:int):void
-				{
-					loader = new Loader();
-					loader.loadBytes(sheets[sheetName][i].data as ByteArray);
+            /**
+             * Load the byte data from the loaded files.
+             *
+             * @param i Current image index.
+             **/
+            function loadBytes(i:int):void
+            {
+                loader = new Loader();
+                loader.loadBytes(sheets[sheetName][i].data as ByteArray);
 
-					//This delay timer is needed because trying to access the data of the loader immediately after loading bytes throws an Error. The data isn't available until after about
-					//50ms has passed.
-					timer.start();
-				}
-			}
+                //This delay timer is needed because trying to access the data of the loader immediately after loading bytes throws an Error. The data isn't available until after about
+                //50ms has passed.
+                timer.start();
+            }
+        }
 
-			/**
-			 * Encodes Bitmap Data into a JPEG using Adobe Corelib
-			 *
-			 * @param data A Vector contating the bitmapData you want to encode.
-			 * @default null
-			 * @return null
-			 **/
-			private function encodeJPEG(data:Vector.<BitmapData>):void
-			{
-				var encoder:JPGEncoder = new JPGEncoder(80);
-				var bytes:ByteArray;
-				var outputFile:File = new File(); //---------------------------------------------------File Object that will be saving out the JPEGS.
-				var xmlFile:File = new File(); //------------------------------------------------------File Object that will be saving out the XML.
-				var i:int = 0;
-				var len:Number = data.length;
+        /**
+         * Encodes Bitmap Data into a JPEG using Adobe Corelib
+         *
+         * @param data A Vector contating the bitmapData you want to encode.
+         * @default null
+         * @return null
+         **/
+        private function encodeJPEG(data:Vector.<BitmapData>):void
+        {
+            var encoder:JPGEncoder = new JPGEncoder(80);
+            var bytes:ByteArray;
+            var outputFile:File = new File(); //---------------------------------------------------File Object that will be saving out the JPEGS.
+            var xmlFile:File = new File(); //------------------------------------------------------File Object that will be saving out the XML.
+            var i:int = 0;
+            var len:Number = data.length;
 
-				outputFile.addEventListener(Event.COMPLETE, nextStep);
+            outputFile.addEventListener(Event.COMPLETE, nextStep);
 
-				saveJPG(); //--------------------------------------------------------------------------Begin Saving.
+            saveJPG(); //--------------------------------------------------------------------------Begin Saving.
 
-				/**
-				 * Saves out a JPEG.
-				 **/
-				function saveJPG():void
-				{
-					trace("Save Image");
-					bytes = encoder.encode(data[i]); //------------------------------------------------Store the bytes after image is encoded.
-					i++;
-					outputFile.save(bytes, "decalSheet.jpg"); //---------------------------------------Saves File with default name of "decalSheet".
-				}
+            /**
+             * Saves out a JPEG.
+             **/
+            function saveJPG():void
+            {
+                trace("Save Image");
+                bytes = encoder.encode(data[i]); //------------------------------------------------Store the bytes after image is encoded.
+                i++;
+                outputFile.save(bytes, "decalSheet.jpg"); //---------------------------------------Saves File with default name of "decalSheet".
+            }
 
-				/**
-				 * Event that triggers after an image is saved successfully.
-				 *
-				 * @param e Event
-				 **/
-				function nextStep(e:Event):void
-				{
-					srcLookup.push(e.target.name); //--------------------------------------------------Store the saved files name.
-					if(i < len) //---------------------------------------------------------------------If there are more images left to be saved, save next JPEG.
-					{
-						saveJPG();
-					}
-					else //----------------------------------------------------------------------------If there are no more images left to be saved, start formatting the XML.
-					{
-						formatXML();
-					}
-				}
+            /**
+             * Event that triggers after an image is saved successfully.
+             *
+             * @param e Event
+             **/
+            function nextStep(e:Event):void
+            {
+                srcLookup.push(e.target.name); //--------------------------------------------------Store the saved files name.
+                if (i < len) //---------------------------------------------------------------------If there are more images left to be saved, save next JPEG.
+                {
+                    saveJPG();
+                }
+                else //----------------------------------------------------------------------------If there are no more images left to be saved, start formatting the XML.
+                {
+                    formatXML();
+                }
+            }
 
-				/**
-				 * Convert the XML output into an XML file.
-				 **/
-				function formatXML():void
-				{
-					var outputXML:XML = XML(xmlString); //---------------------------------------------Converts the XML String into true XML.
-					var i:int = 0;
-					var len:Number = getSheetLength();
+            /**
+             * Convert the XML output into an XML file.
+             **/
+            function formatXML():void
+            {
+                var outputXML:XML = XML(xmlString); //---------------------------------------------Converts the XML String into true XML.
+                var i:int = 0;
+                var len:Number = getSheetLength();
 
-					for(i ; i< len ; i++)
-					{
-						// Fills in the empty attributes in the sheet section of the XML with the correct information.
-						(outputXML.sheets.sheet[i] as XML).@w = (completedBitmaps[i] as BitmapData).width;
-						(outputXML.sheets.sheet[i] as XML).@h = (completedBitmaps[i] as BitmapData).height;
-						(outputXML.sheets.sheet[i] as XML).@src = srcLookup[i];
-					}
+                for (i; i < len; i++)
+                {
+                    // Fills in the empty attributes in the sheet section of the XML with the correct information.
+                    (outputXML.sheets.sheet[i] as XML).@w = (completedBitmaps[i] as BitmapData).width;
+                    (outputXML.sheets.sheet[i] as XML).@h = (completedBitmaps[i] as BitmapData).height;
+                    (outputXML.sheets.sheet[i] as XML).@src = srcLookup[i];
+                }
 
-					(outputXML.sheets).@baseURL = baseURL.text; //-------------------------------------Set the baseURL attribute.
+                (outputXML.sheets).@baseURL = baseURL.text; //-------------------------------------Set the baseURL attribute.
 
-					saveXML(outputXML); //-------------------------------------------------------------Save the XML file.
-				}
+                saveXML(outputXML); //-------------------------------------------------------------Save the XML file.
+            }
 
-				/**
-				 * Saves the XML File.
-				 *
-				 * @param outputXML XML file to be saved.
-				 **/
-				function saveXML(outputXML:XML):void
-				{
-					xmlFile.save(outputXML, "decalSheetXML.xml");
-					trace("Save XML");
-					isLoading = false; //---------------------------------------------------------------Set the loading flag to false.
-				}
-			}
+            /**
+             * Saves the XML File.
+             *
+             * @param outputXML XML file to be saved.
+             **/
+            function saveXML(outputXML:XML):void
+            {
+                xmlFile.save(outputXML, "decalSheetXML.xml");
+                trace("Save XML");
+                isLoading = false; //---------------------------------------------------------------Set the loading flag to false.
+            }
+        }
 		]]>
 	</fx:Script>
-	<s:Button label="Browse"  x="372" y="44" click="beginBrowse()"/>
-	<s:Button label="Layout and Save"  x="372" y="71" click="createSheets()"/>
+    <s:Button label="Browse" x="372" y="44" click="beginBrowse()"/>
+    <s:Button label="Layout and Save" x="372" y="71" click="createSheets()"/>
 
-	<mx:Label text="Loaded Images"  x="140" y="19"/>
-	<s:List id="loadedList" dataProvider="{loadedNamesList}" enabled="true" top="43" bottom="20" right="141" left="11">
-		<s:layout>
-			<s:VerticalLayout/>
-		</s:layout>
-	</s:List>
-	<mx:Label x="372" y="104" text="Base URL"/>
-	<s:TextInput id="baseURL" x="372" y="123" width="105"/>
+    <mx:Label text="Loaded Images" x="140" y="19"/>
+    <s:List id="loadedList" dataProvider="{loadedNamesList}" enabled="true" top="43" bottom="20" right="141" left="11">
+        <s:layout>
+            <s:VerticalLayout/>
+        </s:layout>
+    </s:List>
+    <mx:Label x="372" y="104" text="Base URL"/>
+    <s:TextInput id="baseURL" x="372" y="123" width="105"/>
 </mx:WindowedApplication>

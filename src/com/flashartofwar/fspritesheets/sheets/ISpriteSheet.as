@@ -1,25 +1,25 @@
-
 package com.flashartofwar.fspritesheets.sheets
 {
-	import com.flashartofwar.fspritesheets.sprites.FSprite;
-	import flash.display.BitmapData;
-	import flash.display.IBitmapDrawable;
-	import flash.events.IEventDispatcher;
-	import flash.geom.Rectangle;	
+    import com.flashartofwar.fspritesheets.sprites.FSprite;
 
-	public interface ISpriteSheet extends IBitmapDrawable, IEventDispatcher
-	{
+    import flash.display.BitmapData;
+    import flash.display.IBitmapDrawable;
+    import flash.events.IEventDispatcher;
+    import flash.geom.Rectangle;
 
-		function get loaded() : Boolean;
+    public interface ISpriteSheet extends IBitmapDrawable, IEventDispatcher
+    {
 
-		function registerDecal(name : String, rectangle : Rectangle, scale9Rect : Rectangle = null) : void;
+        [Deprecated(replacement="This is being phased out.", since="1.0.0-alpha")] function get loaded():Boolean;
 
-		function deleteDecal(name : String) : Boolean;
+        function registerDecal(name:String, rectangle:Rectangle, scale9Rect:Rectangle = null):void;
 
-		function getDecal(name : String, pixelSnapping : String = "auto", smoothing : Boolean = false) : FSprite;
+        function deleteDecal(name:String):Boolean;
 
-		function sample(name : String, smoothing : Boolean = false) : BitmapData;
+        function getDecal(name:String, pixelSnapping:String = "auto", smoothing:Boolean = false):FSprite;
 
-		function clear() : Boolean;
-	}
+        function sample(name:String, smoothing:Boolean = false):BitmapData;
+
+        function clear():Boolean;
+    }
 }
