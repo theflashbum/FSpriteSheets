@@ -21,7 +21,7 @@ package com.flashartofwar.fspritesheets.sheets
         public function runBeforeEveryTest():void
         {
             sheet = new SpriteSheet(new BitmapData(100, 100, false, 0xff0000));
-            sheet.registerDecal("decalA", new Rectangle(0, 0, 100, 50));
+            sheet.registerSprite("decalA", new Rectangle(0, 0, 100, 50));
         }
 
         [After]
@@ -34,13 +34,13 @@ package com.flashartofwar.fspritesheets.sheets
         [Test]
         public function testGetDecal():void
         {
-            Assert.assertNotNull(sheet.getDecal("decalA"));
+            Assert.assertNotNull(sheet.getSprite("decalA"));
         }
 
         [Test]
         public function testSpriteDimensions():void
         {
-            var sprite:IFSprite = sheet.getDecal("decalA");
+            var sprite:IFSprite = sheet.getSprite("decalA");
             Assert.assertEquals(sprite.width, 100);
             Assert.assertEquals(sprite.height, 50);
         }
@@ -57,36 +57,36 @@ package com.flashartofwar.fspritesheets.sheets
         [Test(expected="Error")]
         public function testSampleSpriteLargerThenSheet1():void
         {
-            sheet.registerDecal("decalB", new Rectangle(300, 300));
-            var sprite:IFSprite = sheet.getDecal("decalB");
+            sheet.registerSprite("decalB", new Rectangle(300, 300));
+            var sprite:IFSprite = sheet.getSprite("decalB");
         }
 
         [Test(expected="Error")]
         public function testSampleSpriteLargerThenSheet2():void
         {
-            sheet.registerDecal("decalB", new Rectangle(100, 300));
-            var sprite:IFSprite = sheet.getDecal("decalB");
+            sheet.registerSprite("decalB", new Rectangle(100, 300));
+            var sprite:IFSprite = sheet.getSprite("decalB");
         }
 
         [Test(expected="Error")]
         public function testSampleSpriteLargerThenSheet3():void
         {
-            sheet.registerDecal("decalB", new Rectangle(300, 100));
-            var sprite:IFSprite = sheet.getDecal("decalB");
+            sheet.registerSprite("decalB", new Rectangle(300, 100));
+            var sprite:IFSprite = sheet.getSprite("decalB");
         }
 
         [Test]
         public function testClear():void
         {
             sheet.clear();
-            Assert.assertNull(sheet.getDecal("decalA"));
+            Assert.assertNull(sheet.getSprite("decalA"));
         }
 
         [Test]
         public function testDeleteDecal():void
         {
-            sheet.deleteDecal("decalA")
-            Assert.assertNull(sheet.getDecal("decalA"));
+            sheet.deleteSprite("decalA")
+            Assert.assertNull(sheet.getSprite("decalA"));
         }
 
     }

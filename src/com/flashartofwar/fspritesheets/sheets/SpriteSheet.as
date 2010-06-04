@@ -44,9 +44,9 @@ package com.flashartofwar.fspritesheets.sheets
     public class SpriteSheet extends Bitmap implements ISpriteSheet
     {
 
-        protected var decalRectangles:Dictionary = new Dictionary(true);
+        protected var spriteRectangles:Dictionary = new Dictionary(true);
         protected var _loaded:Boolean;
-        public var decalNames:Array = new Array();
+        public var spriteNames:Array = new Array();
 
         /**
          * <p>Sheet constructor.</p>
@@ -86,10 +86,10 @@ package com.flashartofwar.fspritesheets.sheets
          * on the Sheet's BitmapData.
          *
          */
-        public function registerDecal(name:String, rectangle:Rectangle, scale9Rect:Rectangle = null):void
+        public function registerSprite(name:String, rectangle:Rectangle, scale9Rect:Rectangle = null):void
         {
-            decalRectangles[name] = rectangle;
-            decalNames.push(name);
+            spriteRectangles[name] = rectangle;
+            spriteNames.push(name);
         }
 
         /**
@@ -98,15 +98,15 @@ package com.flashartofwar.fspritesheets.sheets
          *
          * @param name
          * @return
-                *
+         *
          */
-        public function deleteDecal(name:String):Boolean
+        public function deleteSprite(name:String):Boolean
         {
-            var index:Number = decalNames.indexOf(name);
+            var index:Number = spriteNames.indexOf(name);
             if (index != - 1)
-                decalNames.splice(index, 1);
+                spriteNames.splice(index, 1);
 
-            return delete decalRectangles[name];
+            return delete spriteRectangles[name];
         }
 
         /**
@@ -118,11 +118,11 @@ package com.flashartofwar.fspritesheets.sheets
          *
          * @param name
          * @return
-                *
+         *
          */
-        public function getDecal(name:String, pixelSnapping:String = "auto", smoothing:Boolean = false):FSprite
+        public function getSprite(name:String, pixelSnapping:String = "auto", smoothing:Boolean = false):FSprite
         {
-            return decalRectangles[name] ? new FSprite(name, this, pixelSnapping, smoothing) : null;
+            return spriteRectangles[name] ? new FSprite(name, this, pixelSnapping, smoothing) : null;
         }
 
         /**
@@ -132,11 +132,11 @@ package com.flashartofwar.fspritesheets.sheets
          *
          * @param rect
          * @return
-                *
+         *
          */
         public function sample(name:String, smoothing:Boolean = false):BitmapData
         {
-            var rect:Rectangle = decalRectangles[name];
+            var rect:Rectangle = spriteRectangles[name];
 
             // Applies the correct offset when sampling the data
             var m:Matrix = new Matrix();
@@ -157,8 +157,8 @@ package com.flashartofwar.fspritesheets.sheets
         public function clear():Boolean
         {
             dispatchEvent(new Event(Event.DEACTIVATE, true, true));
-            decalRectangles = new Dictionary(true);
-            decalNames = new Array();
+            spriteRectangles = new Dictionary(true);
+            spriteNames = new Array();
             return true;
         }
 

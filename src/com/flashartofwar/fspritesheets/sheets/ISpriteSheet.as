@@ -12,11 +12,11 @@ package com.flashartofwar.fspritesheets.sheets
 
         [Deprecated(replacement="This is being phased out.", since="1.0.0-alpha")] function get loaded():Boolean;
 
-        function registerDecal(name:String, rectangle:Rectangle, scale9Rect:Rectangle = null):void;
+        function registerSprite(name:String, rectangle:Rectangle, scale9Rect:Rectangle = null):void;
 
-        function deleteDecal(name:String):Boolean;
+        function deleteSprite(name:String):Boolean;
 
-        function getDecal(name:String, pixelSnapping:String = "auto", smoothing:Boolean = false):FSprite;
+        function getSprite(name:String, pixelSnapping:String = "auto", smoothing:Boolean = false):FSprite;
 
         function sample(name:String, smoothing:Boolean = false):BitmapData;
 

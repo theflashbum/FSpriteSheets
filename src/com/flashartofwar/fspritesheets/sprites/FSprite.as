@@ -2,6 +2,8 @@ package com.flashartofwar.fspritesheets.sprites
 {
     import com.flashartofwar.fspritesheets.sheets.ISpriteSheet;
 
+    import flash.display.Bitmap;
+    import flash.display.BitmapData;
     import flash.events.Event;
 
     /**
@@ -43,16 +45,11 @@ package com.flashartofwar.fspritesheets.sprites
      * @author Jesse Freeman http://www.jessefreeman.com
      *
      */
-    public class FSprite extends BaseSprite implements IFSprite
+    public class FSprite extends Bitmap implements IFSprite
     {
 
         protected var sheetSrc:ISpriteSheet;
 
-        [Deprecated(replacement="This is being phased out.", since="1.0.0-alpha")]
-        override public function get loaded():Boolean
-        {
-            return sheetSrc.loaded;
-        }
 
         /**
          * <p>This is the Decal Sheet Constructor.</p>
@@ -83,6 +80,25 @@ package com.flashartofwar.fspritesheets.sprites
             refresh();
 
             addListeners(sheetSrc);
+        }
+
+        [Deprecated(replacement="This is being phased out.", since="1.0.0-alpha")]
+        public function get loaded():Boolean
+        {
+            return sheetSrc.loaded;
+        }
+
+        override public function set bitmapData(value:BitmapData):void
+        {
+            var previousSmoothing:Boolean = smoothing;
+            var previousPixelSnapping:String = pixelSnapping;
+
+            super.bitmapData = value;
+
+            smoothing = previousSmoothing;
+            pixelSnapping = previousPixelSnapping;
+
+            dispatchEvent(new Event(Event.CHANGE, true, true));
         }
 
         /**

@@ -3,6 +3,7 @@ package com.flashartofwar.fspritesheets.sprites
     import com.flashartofwar.fspritesheets.sheets.SpriteSheet;
 
     import flash.display.BitmapData;
+    import flash.display.PixelSnapping;
     import flash.events.Event;
     import flash.geom.Rectangle;
     import flash.utils.Timer;
@@ -28,8 +29,8 @@ package com.flashartofwar.fspritesheets.sprites
         public function runBeforeEveryTest():void
         {
             sheet = new SpriteSheet(new BitmapData(100, 100, false, 0xff0000));
-            sheet.registerDecal(SPRITE_A, new Rectangle(0, 0, 100, 50));
-            sprite = sheet.getDecal(SPRITE_A);
+            sheet.registerSprite(SPRITE_A, new Rectangle(0, 0, 100, 50));
+            sprite = sheet.getSprite(SPRITE_A);
             timer = new Timer(100, 1);
         }
 
@@ -47,10 +48,27 @@ package com.flashartofwar.fspritesheets.sprites
             timer = null;
         }
 
+
         [Test]
         public function testPixelSnappingDefaultValue():void
         {
+            Assert.assertEquals(sprite.pixelSnapping, PixelSnapping.AUTO);
+        }
 
+        [Test]
+        public function testPixelSmoothDefaultValue():void
+        {
+            Assert.assertFalse(sprite.smoothing);
+        }
+
+        [Test]
+        public function testPixelSnappingAndSmoothStateRetainAfterSettingBitmapData():void
+        {
+            sprite.pixelSnapping = PixelSnapping.NEVER;
+            sprite.smoothing = true;
+            sprite.bitmapData = new BitmapData(200, 100, false, 0xff00ff);
+            Assert.assertEquals(sprite.pixelSnapping, PixelSnapping.NEVER);
+            Assert.assertTrue(sprite.smoothing);
         }
 
         [Test(async)]
@@ -88,12 +106,12 @@ package com.flashartofwar.fspritesheets.sprites
             Assert.assertTrue(true);
         }
 
-       [Test(expected="Error")]
-       public function testRefresh():void
-       {
+        [Test(expected="Error")]
+        public function testRefresh():void
+        {
             sprite.detach();
             sprite.refresh();
-       }
+        }
     }
 }
 
