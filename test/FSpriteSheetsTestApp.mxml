@@ -8,6 +8,7 @@
 		<![CDATA[
         import org.flexunit.internals.TraceListener;
         import org.flexunit.listeners.CIListener;
+        import com.flashartofwar.fspritesheets.FSpriteSheetsTestSuite;
         import org.flexunit.runner.FlexUnitCore;
 
         private var core:FlexUnitCore;
@@ -22,7 +23,7 @@
             core = new FlexUnitCore();
             core.addListener(new CIListener());
             core.addListener(new TraceListener());
-            core.run(FSpriteSheetsTestApp);
+            core.run(FSpriteSheetsTestSuite);
         }
 		]]>
 	</mx:Script>
